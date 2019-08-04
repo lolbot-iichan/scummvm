@@ -2134,9 +2134,7 @@ bool AdGame::validMouse() {
 
 //////////////////////////////////////////////////////////////////////////
 bool AdGame::onMouseLeftDown() {
-	if (_debugCursorPos) {
-		LOG(0, "CURSOR: onMouseLeftDown");
-	}
+	warning("CURSOR: onMouseLeftDown");
 
 	if (!validMouse()) {
 		return STATUS_OK;
@@ -2171,9 +2169,7 @@ bool AdGame::onMouseLeftDown() {
 
 //////////////////////////////////////////////////////////////////////////
 bool AdGame::onMouseLeftUp() {
-	if (_debugCursorPos) {
-		LOG(0, "CURSOR: onMouseLeftUp");
-	}
+	warning("CURSOR: onMouseLeftUp");
 
 	if (_activeObject) {
 		_activeObject->handleMouse(MOUSE_RELEASE, MOUSE_BUTTON_LEFT);
@@ -2188,11 +2184,15 @@ bool AdGame::onMouseLeftUp() {
 	} else {
 		handled = DID_SUCCEED(applyEvent("LeftRelease"));
 	}
+
+	warning("CURSOR: onMouseLeftUp handled: %d", handled);
 	
 	if (!handled) {
 		if (_activeObject != nullptr) {
+			warning("CURSOR: onMouseLeftUp trying active object");
 			_activeObject->applyEvent("LeftRelease");
 		} else if (_state == GAME_RUNNING && _scene && _scene->pointInViewport(_mousePos.x, _mousePos.y)) {
+			warning("CURSOR: onMouseLeftUp trying scene");
 			_scene->applyEvent("LeftRelease");
 		}
 	}
