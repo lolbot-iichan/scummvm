@@ -54,6 +54,7 @@
 #include "engines/wintermute/base/scriptables/script_stack.h"
 #include "engines/wintermute/base/scriptables/script.h"
 #include "engines/wintermute/base/sound/base_sound.h"
+#include "engines/wintermute/plugins/plugins.h"
 #include "engines/wintermute/video/video_player.h"
 #include "engines/wintermute/video/video_theora_player.h"
 #include "engines/wintermute/utils/utils.h"
@@ -3147,26 +3148,6 @@ bool BaseGame::externalCall(ScScript *script, ScStack *stack, ScStack *thisStack
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	// SteamAPI
-	//////////////////////////////////////////////////////////////////////////
-	else if (strcmp(name, "SteamAPI") == 0) {
-		thisObj = thisStack->getTop();
-
-		thisObj->setNative(makeSXSteamAPI(_gameRef,  stack));
-		stack->pushNULL();
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	// WMEGalaxyAPI
-	//////////////////////////////////////////////////////////////////////////
-	else if (strcmp(name, "WMEGalaxyAPI") == 0) {
-		thisObj = thisStack->getTop();
-
-		thisObj->setNative(makeSXWMEGalaxyAPI(_gameRef,  stack));
-		stack->pushNULL();
-	}
-
-	//////////////////////////////////////////////////////////////////////////
 	// Object
 	//////////////////////////////////////////////////////////////////////////
 	else if (strcmp(name, "Object") == 0) {
@@ -3415,7 +3396,7 @@ bool BaseGame::externalCall(ScScript *script, ScStack *stack, ScStack *thisStack
 
 	//////////////////////////////////////////////////////////////////////////
 	// failure
-	else {
+	else if (DID_FAIL(EmulatePluginCall(_gameRef, stack, thisStack, name))) {
 		script->runtimeError("Call to undefined function '%s'. Ignored.", name);
 		stack->correctParams(0);
 		stack->pushNULL();
