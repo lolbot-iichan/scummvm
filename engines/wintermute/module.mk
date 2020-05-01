@@ -109,6 +109,7 @@ MODULE_OBJS := \
 	math/matrix4.o \
 	math/vector2.o \
 	platform_osystem.o \
+	plugins/3f_statistics.o \
 	plugins/steam_api.o \
 	plugins/wme_galaxy_api.o \
 	system/sys_class.o \
